@@ -9,8 +9,8 @@ class TasksService:
     def __init__(self, task_repository: ITaskRepository):
         self.task_repository = task_repository
 
-    def create_task(self, title: str, description: str | None) -> Task:
-        task = Task(title=title, description=description, task_id=None, created_at=datetime.now())
+    def create_task(self, title: str, description: str | None, due_date: datetime) -> Task:
+        task = Task(title=title, description=description, task_id=None, due_date=due_date, created_at=datetime.now())
 
         return self.task_repository.create_task(task)
 

@@ -26,7 +26,8 @@ async def create_task(
     """
     created_task = tasks_service.create_task(
         title=request.title,
-        description=request.description
+        description=request.description,
+        due_date=request.due_date
     )
 
     return created_task
