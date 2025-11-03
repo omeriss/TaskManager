@@ -1,0 +1,39 @@
+.nav {
+  position: sticky;
+  top: 0;
+
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    height: 64px;
+  }
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  height: 40px;
+}
+
+.title {
+  color: #fff;
+  font-weight: 600;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.links {
+  flex: 1 1 auto;
+  margin: 0 24px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
