@@ -15,7 +15,7 @@ app = FastAPI(
 )
 
 # Add API routes
-app.include_router(api_router)
+app.include_router(api_router, prefix="/api")
 
 # Sets all CORS enabled origins
 app.add_middleware(

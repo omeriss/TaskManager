@@ -1,0 +1,63 @@
+name: Build and publish to Azure Container Apps
+
+on:
+  push:
+    branches: [master, dev]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU and Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Log in to Azure Container Registry
+        run: |
+          az acr login --name ${{ vars.ACR_NAME }}
+
+      - name: Build and push Docker image to ACR
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd
+          file: ./BackEnd/Dockerfile
+          push: true
+          tags: ${{ vars.ACR_NAME }}.azurecr.io/${{ vars.BACK_IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Deploy backend image to Azure Container App
+        env:
+          IMAGE: ${{ vars.ACR_NAME }}.azurecr.io/${{ vars.BACK_IMAGE_NAME }}:${{ github.sha }}
+        run: |
+          # Ensure subscription is set (AZURE_CREDENTIALS should include subscriptionId)
+          az account show
+          # Update the existing Container App to use the new image
+          az containerapp update \
+            --name ${{ vars.BACK_CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.RESOURCE_GROUP }} \
+            --image "$IMAGE"
+
+      - name: Build and push UI Docker image to ACR
+        uses: docker/build-push-action@v4
+        with:
+          context: ./UI
+          file: ./UI/Dockerfile
+          push: true
+          tags: ${{ vars.ACR_NAME }}.azurecr.io/${{ vars.UI_IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Deploy UI image to Azure Container App
+        env:
+          IMAGE: ${{ vars.ACR_NAME }}.azurecr.io/${{ vars.UI_IMAGE_NAME }}:${{ github.sha }}
+        run: |
+          # Update the UI Container App to use the new image
+          az containerapp update \
+            --name ${{ vars.UI_CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.RESOURCE_GROUP }} \
+            --image "$IMAGE"
