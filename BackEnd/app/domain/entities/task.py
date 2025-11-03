@@ -22,15 +22,15 @@ class Task:
 
     def __init__(
         self,
-        task_id: int,
+        task_id: int | None,
         title: str,
         description: str | None,
-        status: TaskStatus,
-        due_date: datetime | None,
-        completed_at: datetime | None,
         created_at: datetime,
+        status: TaskStatus = TaskStatus.PENDING,
+        due_date: datetime | None = None,
+        completed_at: datetime | None = None,
     ):
-        self.id = task_id
+        self.id = task_id if task_id is not None else -1
         self.title = title
         self.description = description
         self.status = status
