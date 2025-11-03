@@ -1,13 +1,9 @@
 from sqlalchemy import Column, Integer, String, DateTime, Text, func, Enum
 from sqlalchemy.orm import declarative_base
-import enum
+
+from app.domain.entities.task import TaskStatus
 
 Base = declarative_base()
-
-
-class TaskStatus(enum.Enum):
-    PENDING = "pending"
-    COMPLETED = "completed"
 
 
 class Task(Base):
