@@ -5,6 +5,9 @@ from app.services.tasks_service import TasksService
 from app.domain.entities.task import Task, TaskStatus
 from tests.mock_task_repository import MockTaskRepository
 
+# Note if someone reads this: Those tests are kind of pointless because there is not much logic in this app, I did them
+# just to show that I know how to write tests
+
 
 class TestTasksService:
     """Test suite for TasksService"""
