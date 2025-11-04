@@ -93,6 +93,28 @@ class TestTasksService:
         assert completed_task.completed_at >= before_completion
         assert completed_task.completed_at <= after_completion
 
+    def test_complete_task_twice_keeps_original_timestamp(self, service):
+        """Test that completing a task twice does not update the completed_at timestamp the second time"""
+        task = service.create_task("Task", "Desc", datetime.now())
+
+        completed_task_first = service.complete_task(task.id)
+        first_completed_at = completed_task_first.completed_at
+
+        assert completed_task_first.status == TaskStatus.COMPLETED
+        assert first_completed_at is not None
+
+        # Wait a tiny bit to ensure timestamps would be different if updated
+        import time
+        time.sleep(0.01)
+
+        # Complete the task for the second time
+        completed_task_second = service.complete_task(task.id)
+        second_completed_at = completed_task_second.completed_at
+
+        # The completed_at timestamp should remain the same
+        assert completed_task_second.status == TaskStatus.COMPLETED
+        assert second_completed_at == first_completed_at
+
     def test_delete_task_success(self, service, mock_repo):
         """Test deleting an existing task"""
         task = service.create_task("Task to delete", "Description", datetime.now())
