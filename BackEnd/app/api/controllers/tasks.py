@@ -1,7 +1,7 @@
 from typing import Optional
 from datetime import datetime
 from logging import Logger
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import Response
 from dependency_injector.wiring import inject, Provide
 from app.api.schemas.requests.create_task_request import CreateTaskRequest
@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.post("")
 @inject
-async def create_task(
+def create_task(
     request: CreateTaskRequest,
     tasks_service: TasksService = Depends(Provide[Container.tasks_service]),
     logger: Logger = Depends(Provide[Container.logger])
@@ -40,7 +40,7 @@ async def create_task(
 
 @router.get("")
 @inject
-async def get_tasks(
+def get_tasks(
     from_date: Optional[datetime] = None,
     to_date: Optional[datetime] = None,
     status: Optional[TaskStatus] = None,
@@ -91,7 +91,7 @@ def export_task_summary(
 
 @router.get("/{task_id}")
 @inject
-async def get_task(
+def get_task(
     task_id: int,
     tasks_service: TasksService = Depends(Provide[Container.tasks_service]),
     logger: Logger = Depends(Provide[Container.logger])
@@ -107,12 +107,15 @@ async def get_task(
 
     task = tasks_service.get_task(task_id)
 
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+
     return task
 
 
 @router.delete("/{task_id}")
 @inject
-async def delete_task(
+def delete_task(
     task_id: int,
     tasks_service: TasksService = Depends(Provide[Container.tasks_service]),
     logger: Logger = Depends(Provide[Container.logger])
@@ -126,14 +129,17 @@ async def delete_task(
     """
     logger.info(f"Deleting task with ID: {task_id}")
 
-    tasks_service.delete_task(task_id)
+    found = tasks_service.delete_task(task_id)
+
+    if not found:
+        raise HTTPException(status_code=404, detail="Task not found")
 
     return {"message": "Task deleted successfully"}
 
 
 @router.patch("/{task_id}/complete")
 @inject
-async def complete_task(
+def complete_task(
     task_id: int,
     tasks_service: TasksService = Depends(Provide[Container.tasks_service]),
     logger: Logger = Depends(Provide[Container.logger])
@@ -147,6 +153,9 @@ async def complete_task(
     """
     logger.info(f"Marking task with ID: {task_id} as completed")
 
-    tasks_service.complete_task(task_id)
+    task = tasks_service.complete_task(task_id)
+
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
 
     return {"message": "Task marked as completed"}

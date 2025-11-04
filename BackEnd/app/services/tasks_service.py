@@ -1,6 +1,6 @@
 from datetime import datetime
 from app.domain.repositories.task_repository import ITaskRepository
-from app.domain.entities.task import Task
+from app.domain.entities.task import Task, TaskStatus
 from openpyxl import Workbook
 from io import BytesIO
 from typing import Optional
@@ -30,14 +30,19 @@ class TasksService:
         """
         return self.task_repository.get_task(task_id)
 
-    def complete_task(self, task_id: int) -> Task:
+    def complete_task(self, task_id: int) -> Task | None:
         """
         Mark a task as completed
         :param task_id: ID of the task
-        :return: The updated task
+        :return: The updated task or None if task does not exist
         """
         task = self.task_repository.get_task(task_id)
-        task.set_completed()
+
+        if task is None:
+            return None
+
+        if task.status == TaskStatus.PENDING:
+            task.set_completed()
 
         return self.task_repository.edit_task(task)
 
