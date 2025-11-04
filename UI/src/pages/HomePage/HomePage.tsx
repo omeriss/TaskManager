@@ -2,7 +2,7 @@ import TaskCard from "../../components/Task/Task";
 import styles from "./HomePage.module.css";
 import { useQuery } from "@tanstack/react-query";
 import routes from "../../api/api";
-import { Spin, Input, Select, DatePicker } from "antd";
+import { Spin, Input, Select, DatePicker, Button } from "antd";
 import { TaskStatus, type Task } from "../../interfaces/Task";
 import { useMemo, useState } from "react";
 import type { TaskFilters } from "../../interfaces/TaskFilters";
@@ -118,6 +118,9 @@ const HomePage = () => {
             <Select.Option value="created_at">Created Date</Select.Option>
             <Select.Option value="due_date">Due Date</Select.Option>
           </Select>
+          <Button type="primary" href="/api/tasks/summary">
+            Download Summary
+          </Button>
         </div>
       </div>
 
