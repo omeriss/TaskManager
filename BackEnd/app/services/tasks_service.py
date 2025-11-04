@@ -3,6 +3,7 @@ from app.domain.repositories.task_repository import ITaskRepository
 from app.domain.entities.task import Task
 from openpyxl import Workbook
 from io import BytesIO
+from typing import Optional
 
 
 class TasksService:
@@ -26,12 +27,11 @@ class TasksService:
     def delete_task(self, task_id: int) -> bool:
         return self.task_repository.delete_task(task_id)
 
-    def get_tasks(self, from_date: datetime | None = None, to_date: datetime | None = None,
-                  status: str | None = None) -> list[Task]:
-        return self.task_repository.get_tasks(from_date, to_date, status)
+    def get_tasks(self, from_date: Optional[datetime] = None, to_date: Optional[datetime] = None,
+                  status: Optional[str] = None, title_contains: Optional[str] = None) -> list[Task]:
+        return self.task_repository.get_tasks(from_date, to_date, status, title_contains)
 
     def get_tasks_xlsx(self) -> bytes:
-
         tasks = self.task_repository.get_tasks()
 
         # create the xlsx file

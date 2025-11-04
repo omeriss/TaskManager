@@ -1,0 +1,25 @@
+.tasksContainer {
+  padding: 16px;
+}
+
+.filters {
+  margin-bottom: 24px;
+
+  & > div {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}
+
+.noneContainer {
+  margin-top: 32px;
+  text-align: center;
+  color: #777f8e;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 16px;
+}

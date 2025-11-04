@@ -1,0 +1,19 @@
+.modalForm {
+  width: 100%;
+  max-width: max(400px, 70vw);
+}
+
+.formItem {
+  margin-bottom: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.datePicker {
+  width: 100%;
+}

@@ -39,6 +39,7 @@ async def get_tasks(
     from_date: Optional[datetime] = None,
     to_date: Optional[datetime] = None,
     status: Optional[TaskStatus] = None,
+    title_contains: Optional[str] = None,
     tasks_service: TasksService = Depends(Provide[Container.tasks_service])
 ):
     """
@@ -47,9 +48,10 @@ async def get_tasks(
     :param to_date: the end date filter
     :param status: the status filter
     :param tasks_service: injected tasks service
+    :param title_contains: filter by title substring
     :return: list of tasks
     """
-    tasks = tasks_service.get_tasks(from_date=from_date, to_date=to_date, status=status)
+    tasks = tasks_service.get_tasks(from_date=from_date, to_date=to_date, status=status, title_contains=title_contains)
 
     return tasks
 
