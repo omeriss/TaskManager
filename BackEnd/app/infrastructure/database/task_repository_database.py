@@ -66,7 +66,7 @@ class TaskRepositoryDatabase(ITaskRepository):
         return True
 
     def get_tasks(self, from_date: Optional[datetime] = None, to_date: Optional[datetime] = None,
-                  status: Optional[TaskStatus] = None) -> List[TaskEntity]:
+                  status: Optional[TaskStatus] = None, title_contains: Optional[str] = None) -> List[TaskEntity]:
         query = self.session.query(models.Task)
 
         # Add the filters
@@ -76,6 +76,8 @@ class TaskRepositoryDatabase(ITaskRepository):
             query = query.filter(models.Task.created_at <= to_date)
         if status:
             query = query.filter(models.Task.status == status)
+        if title_contains:
+            query = query.filter(models.Task.title.ilike(f"%{title_contains}%"))
 
         db_tasks = query.all()
 

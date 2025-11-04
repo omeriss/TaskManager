@@ -17,6 +17,12 @@
   gap: 12px;
 }
 
+@media (max-width: 600px) {
+  .logoContainer {
+    display: none;
+  }
+}
+
 .logo {
   height: 40px;
 }

@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import NavBar from "./components/NavBar/NavBar";
 import About from "./pages/About/About";
 import "./styles/global.css";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       </header>
 
       <main>
+        <ToastContainer />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<About />} />

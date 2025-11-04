@@ -3,6 +3,7 @@ import { Layout, Menu, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import styles from "./NavBar.module.css";
 import { NAVBAR_ITEMS } from "./NavBar.config";
+import NewTaskModal from "../NewTaskModal/NewTaskModal";
 
 const { Header } = Layout;
 
@@ -29,9 +30,11 @@ const NavBar = () => {
         />
 
         <div className={styles.actions}>
-          <Button type="primary" icon={<PlusOutlined />}>
-            New Task
-          </Button>
+          <NewTaskModal>
+            <Button type="primary" icon={<PlusOutlined />}>
+              New Task
+            </Button>
+          </NewTaskModal>
         </div>
       </div>
     </Header>
