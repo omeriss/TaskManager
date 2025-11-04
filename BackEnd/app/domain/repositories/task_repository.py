@@ -48,8 +48,8 @@ class ITaskRepository(ABC):
                   status: Optional[TaskStatus] = None, title_contains: Optional[str] = None) -> List[Task]:
         """
         Get tasks filtered by date range and status
-        :param from_date: the start date for filtering
-        :param to_date: the end date for filtering
+        :param from_date: the start date created for filtering
+        :param to_date: the end date created for filtering
         :param status: the status to filter tasks
         :param title_contains: string that should be contained in the task title
         :return: list of tasks matching
